@@ -120,7 +120,7 @@ setup_clang() {
     clone_if_not_existing "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86" "$CLANG_BRANCH"
     # shellcheck disable=SC2034
     CLANG_PATH="$TMPDOWN/linux-x86/clang-$CLANG_REVISION"
-    rm -rf "$TMPDOWN/linux-x86/.git" "$TMPDOWN/linux-x86/"!(clang-$CLANG_REVISION)
+    rm -rf "$TMPDOWN/linux-x86/.git" "$TMPDOWN/linux-x86/"!("clang-$CLANG_REVISION")
     drop_python_wrapper "$CLANG_PATH/bin/clang"
 
     if [ -n "$deviceinfo_kernel_llvm_compile" ] && $deviceinfo_kernel_llvm_compile; then
