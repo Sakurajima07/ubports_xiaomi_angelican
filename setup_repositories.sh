@@ -83,35 +83,39 @@ setup_clang() {
 
     print_header "Setting up clang repositories"
 
-    local CLANG_BRANCH
-    local CLANG_REVISION
     # shellcheck disable=SC2154
-    case "$deviceinfo_halium_version" in
-        9)
-            CLANG_BRANCH="pie-gsi"
-            CLANG_REVISION="4691093"
-            ;;
-        10)
-            CLANG_BRANCH="android10-gsi"
-            CLANG_REVISION="r353983c"
-            ;;
-        11)
-            CLANG_BRANCH="android11-gsi"
-            CLANG_REVISION="r383902"
-            ;;
-        12)
-            CLANG_BRANCH="android12L-gsi"
-            CLANG_REVISION="r416183b"
-            ;;
-        13)
-            CLANG_BRANCH="master-kernel-build-2022"
-            CLANG_REVISION="r450784e"
-            ;;
-        *)
-            print_error "Clang is not supported with halium version '$deviceinfo_halium_version'"
-            exit 1
-            ;;
-    esac
+    local CLANG_BRANCH="$deviceinfo_kernel_clang_branch"
+    # shellcheck disable=SC2154
+    local CLANG_REVISION="$deviceinfo_kernel_clang_revision"
+    if [[ -z "$CLANG_BRANCH" || -z "$CLANG_REVISION" ]]; then
+        # shellcheck disable=SC2154
+        case "$deviceinfo_halium_version" in
+            9)
+                CLANG_BRANCH="pie-gsi"
+                CLANG_REVISION="4691093"
+                ;;
+            10)
+                CLANG_BRANCH="android10-gsi"
+                CLANG_REVISION="r353983c"
+                ;;
+            11)
+                CLANG_BRANCH="android11-gsi"
+                CLANG_REVISION="r383902"
+                ;;
+            12)
+                CLANG_BRANCH="android12L-gsi"
+                CLANG_REVISION="r416183b"
+                ;;
+            13)
+                CLANG_BRANCH="master-kernel-build-2022"
+                CLANG_REVISION="r450784e"
+                ;;
+            *)
+                print_error "Clang is not supported with halium version '$deviceinfo_halium_version'"
+                exit 1
+                ;;
+        esac
+    fi
 
     clone_if_not_existing "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86" "$CLANG_BRANCH"
     # shellcheck disable=SC2034

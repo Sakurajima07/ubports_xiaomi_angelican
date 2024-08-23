@@ -67,6 +67,13 @@ deviceinfo_kernel_gcc_toolchain_dir="gcc-linaro-6.3.1-2017.02-x86_64_aarch64-lin
 # Whether the kernel is compiled using Clang or not
 deviceinfo_kernel_clang_compile="true"
 
+# Use a specific branch of prebuilt clang binaries instead of default for current Halium version
+# https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86#android-clang_llvm-prebuilts
+deviceinfo_kernel_clang_branch="android12L-gsi"
+
+# Use a specific revision of prebuilt clang revision (version) instead of default for current Halium version
+deviceinfo_kernel_clang_revision="r416183b"
+
 # Whether LLVM should be used as primary toolchain or not
 # Note: requires `deviceinfo_kernel_clang_compile` to be enabled
 deviceinfo_kernel_llvm_compile="false"
