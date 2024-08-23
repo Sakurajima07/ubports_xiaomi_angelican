@@ -128,6 +128,10 @@ deviceinfo_bootimg_tailtype="SEAndroid"
 # Whether vbmeta should be appended to the boot image or not
 deviceinfo_bootimg_append_vbmeta="false"
 
+# Whether initramfs should be split away to a separate init_boot.img from boot.img
+# Enable for devices launched with Android 13+
+deviceinfo_bootimg_has_init_boot_partition="false"
+
 ## DTB(O)
 
 # Whether to use dtc extension or not
