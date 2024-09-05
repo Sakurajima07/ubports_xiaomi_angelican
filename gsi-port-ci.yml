@@ -50,6 +50,7 @@ flashable:
       - out/boot.img
       - out/vendor_boot.img
       - out/system.img
+      - out/dtbo.img
   when: manual
 
 devel-flashable:
@@ -73,3 +74,4 @@ devel-flashable:
       - out/boot.img
       - out/vendor_boot.img
       - out/ubuntu.img
+      - out/dtbo.img
