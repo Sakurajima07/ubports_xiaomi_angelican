@@ -10,9 +10,11 @@ INSTALL_MOD_PATH="$(realpath $5)"
 HERE=$(pwd)
 source "${HERE}/deviceinfo"
 
-case "$deviceinfo_arch" in
-    aarch64*) ARCH="arm64" ;;
-    arm*) ARCH="arm" ;;
+kernel_arch="${deviceinfo_kernel_arch:-$deviceinfo_arch}"
+
+case "$kernel_arch" in
+    aarch64|arm64) ARCH="arm64" ;;
+    arm|armhf) ARCH="arm" ;;
     x86_64) ARCH="x86_64" ;;
     x86) ARCH="x86" ;;
 esac

@@ -8,6 +8,15 @@ case $deviceinfo_arch in
     "x86") RAMDISK_ARCH="i386";;
 esac
 
+kernel_arch="${deviceinfo_kernel_arch:-$deviceinfo_arch}"
+
+case "$kernel_arch" in
+    aarch64|arm64) ARCH="arm64" ;;
+    arm|armhf) ARCH="arm" ;;
+    x86_64) ARCH="x86_64" ;;
+    x86) ARCH="x86" ;;
+esac
+
 clone_if_not_existing() {
     local repo_url="$1"
     local repo_branch="$2"
@@ -55,14 +64,14 @@ setup_gcc() {
         fetch_tarball_if_not_existing "$deviceinfo_kernel_gcc_toolchain_source"
         # shellcheck disable=SC2154
         GCC_PATH="$TMPDOWN/$deviceinfo_kernel_gcc_toolchain_dir"
-    elif [ "$deviceinfo_arch" = "aarch64" ]; then
+    elif [ "$ARCH" = "arm64" ]; then
         clone_if_not_existing "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9" "pie-gsi"
         # shellcheck disable=SC2034
         GCC_PATH="$TMPDOWN/aarch64-linux-android-4.9"
         drop_python_wrapper "$GCC_PATH/bin/aarch64-linux-android-gcc"
     fi
 
-    if [ "$deviceinfo_arch" = "aarch64" ] || [ "$deviceinfo_arch" = "arm" ]; then
+    if [[ "$ARCH" = "arm"* ]]; then
         clone_if_not_existing "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9" "pie-gsi"
         # shellcheck disable=SC2034
         GCC_ARM32_PATH="$TMPDOWN/arm-linux-androideabi-4.9"

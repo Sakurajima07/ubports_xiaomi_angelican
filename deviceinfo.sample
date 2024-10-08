@@ -26,6 +26,15 @@ deviceinfo_codename="yumi"
 #  - x86_64
 deviceinfo_arch="aarch64"
 
+# The architecture of the kernel
+# Devices might run aarch64 kernels with arm userspace
+# Defaults to deviceinfo_arch if not provided
+#  - arm
+#  - arm64 (aarch64 is also accepted)
+#  - x86
+#  - x86_64
+deviceinfo_kernel_arch="arm64"
+
 # The halium version the device is based on:
 #  -  9
 #  - 10
