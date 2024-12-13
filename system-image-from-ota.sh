@@ -186,6 +186,11 @@ do
                     [ "$deviceinfo_halium_version" -eq 9 ] && deviceinfo_system_partition_size="2800M"
                     truncate -s "${deviceinfo_system_partition_size:-3000M}" "$OUT/rootfs.img"
                     mkfs.ext4 -F "$OUT/rootfs.img"
+                    # Disable orphan_file as needed when host e2fsprogs 1.47+ would create something
+                    # incompatible with e2fsck 1.45 of UBports recovery breaking 20.04 OTA updates
+		    if dumpe2fs -h "$OUT/rootfs.img" | grep -q 'orphan_file'; then
+                        tune2fs -O '^orphan_file' "$OUT/rootfs.img"
+                    fi
                 ;;
 
                 *)
