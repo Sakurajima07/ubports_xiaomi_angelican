@@ -51,7 +51,10 @@ case "$deviceinfo_halium_version" in
         DEVICE_GENERIC_URL="$DEVICE_GENERIC_URL_BASE/halium-12.0/lastSuccessfulBuild/artifact/halium_halium_arm64.tar.xz"
         ;;
     13)
-        DEVICE_GENERIC_URL="$DEVICE_GENERIC_URL_BASE/halium-13.0/lastSuccessfulBuild/artifact/halium_halium_arm64.tar.xz"
+        case "$deviceinfo_arch" in
+            arm) DEVICE_GENERIC_URL="$DEVICE_GENERIC_URL_BASE/halium-13.0-arm32/lastSuccessfulBuild/artifact/halium_halium_arm.tar.xz";;
+            aarch64) DEVICE_GENERIC_URL="$DEVICE_GENERIC_URL_BASE/halium-13.0/lastSuccessfulBuild/artifact/halium_halium_arm64.tar.xz";;
+        esac
         ;;
     *)
         print_error "Unsupported halium version: '$deviceinfo_halium_version'"
