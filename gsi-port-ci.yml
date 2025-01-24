@@ -15,7 +15,6 @@ image: ubuntu:22.04
 
 build:
   stage: build
-  tags: [ "ubports" ]
   script:
     - apt update
     - >-
