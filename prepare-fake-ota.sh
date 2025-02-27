@@ -13,12 +13,21 @@ fi
 source "${HERE}/deviceinfo"
 source "$SCRIPT/common_functions.sh"
 
+case "$deviceinfo_arch" in
+    arm) ROOTFS_ARCH="armhf" ;;
+    aarch64) ROOTFS_ARCH="arm64" ;;
+    *)
+        print_error "Unsupported architecture: '$deviceinfo_arch'"
+        exit 1
+        ;;
+esac
+
 # Fetches android9 rootfs and generic system image to prepare flashable image from CI-built device tarball
 URL='https://system-image.ubports.com'
 case "${deviceinfo_ubuntu_touch_release:-focal}" in
     "focal")
-        DEFAULT_ROOTFS_URL="https://ci.ubports.com/job/focal-hybris-rootfs-arm64/job/master/lastSuccessfulBuild/artifact/ubuntu-touch-android9plus-rootfs-arm64.tar.gz"
-        DEFAULT_OTA_CHANNEL="20.04/arm64/android9plus/devel"
+        DEFAULT_ROOTFS_URL="https://ci.ubports.com/job/focal-hybris-rootfs-arm64/job/master/lastSuccessfulBuild/artifact/ubuntu-touch-android9plus-rootfs-$ROOTFS_ARCH.tar.gz"
+        DEFAULT_OTA_CHANNEL="20.04/$ROOTFS_ARCH/android9plus/devel"
         ;;
     *)
         # Both overrides need to be specified, if no ubuntu touch release is set
