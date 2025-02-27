@@ -29,6 +29,10 @@ case "${deviceinfo_ubuntu_touch_release:-focal}" in
         DEFAULT_ROOTFS_URL="https://ci.ubports.com/job/focal-hybris-rootfs-arm64/job/master/lastSuccessfulBuild/artifact/ubuntu-touch-android9plus-rootfs-$ROOTFS_ARCH.tar.gz"
         DEFAULT_OTA_CHANNEL="20.04/$ROOTFS_ARCH/android9plus/devel"
         ;;
+    "noble")
+        DEFAULT_ROOTFS_URL="https://ci.ubports.com/job/focal-hybris-rootfs-arm64/job/master/lastSuccessfulBuild/artifact/ubuntu-touch-android9plus-rootfs-next-$ROOTFS_ARCH.tar.gz"
+        DEFAULT_OTA_CHANNEL="utnext/$ROOTFS_ARCH/android9plus/daily"
+        ;;
     *)
         # Both overrides need to be specified, if no ubuntu touch release is set
         if [ -z "${ROOTFS_URL+x}" ] || [ -z "${OTA_CHANNEL+x}" ]; then
