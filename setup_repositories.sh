@@ -1,20 +1,17 @@
 #!/bin/bash
 set -ex
 
-# shellcheck disable=SC2154
-case $deviceinfo_arch in
-    "armhf") RAMDISK_ARCH="armhf";;
-    "aarch64") RAMDISK_ARCH="arm64";;
-    "x86") RAMDISK_ARCH="i386";;
-esac
-
 kernel_arch="${deviceinfo_kernel_arch:-$deviceinfo_arch}"
 
 case "$kernel_arch" in
-    aarch64|arm64) ARCH="arm64" ;;
-    arm|armhf) ARCH="arm" ;;
-    x86_64) ARCH="x86_64" ;;
-    x86) ARCH="x86" ;;
+    aarch64|arm64) RAMDISK_ARCH="arm64";;
+    arm) RAMDISK_ARCH="armhf";;
+    x86) RAMDISK_ARCH="i386";;
+esac
+
+case "$kernel_arch" in
+    aarch64) ARCH="arm64" ;;
+    *) ARCH="$kernel_arch" ;;
 esac
 
 clone_if_not_existing() {
@@ -71,7 +68,7 @@ setup_gcc() {
         drop_python_wrapper "$GCC_PATH/bin/aarch64-linux-android-gcc"
     fi
 
-    if [[ "$ARCH" = "arm"* ]]; then
+    if [[ "$ARCH" = "arm" ]]; then
         clone_if_not_existing "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9" "pie-gsi"
         # shellcheck disable=SC2034
         GCC_ARM32_PATH="$TMPDOWN/arm-linux-androideabi-4.9"

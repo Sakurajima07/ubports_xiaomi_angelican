@@ -13,10 +13,8 @@ source "${HERE}/deviceinfo"
 kernel_arch="${deviceinfo_kernel_arch:-$deviceinfo_arch}"
 
 case "$kernel_arch" in
-    aarch64|arm64) ARCH="arm64" ;;
-    arm|armhf) ARCH="arm" ;;
-    x86_64) ARCH="x86_64" ;;
-    x86) ARCH="x86" ;;
+    aarch64) ARCH="arm64" ;;
+    *) ARCH="$kernel_arch" ;;
 esac
 
 [ -f "$HERE/ramdisk-recovery.img" ] && RECOVERY_RAMDISK="$HERE/ramdisk-recovery.img"
