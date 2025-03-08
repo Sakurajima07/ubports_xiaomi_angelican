@@ -209,15 +209,16 @@ setup_ramdisk() {
     # shellcheck disable=SC2154
     if [ -n "$deviceinfo_prebuilt_boot_ramdisk" ] && [ -f "$deviceinfo_prebuilt_boot_ramdisk" ]; then
         print_message "Using prebuilt ramdisk: $deviceinfo_prebuilt_boot_ramdisk"
-        cp "$deviceinfo_prebuilt_ramdisk" halium-boot-ramdisk.img
+        cp "$deviceinfo_prebuilt_boot_ramdisk" halium-boot-ramdisk.img
     elif [ -n "$deviceinfo_prebuilt_boot_ramdisk_source" ]; then
         print_message "Downloading prebuilt ramdisk from: $deviceinfo_prebuilt_boot_ramdisk_source"
         RAMDISK_URL="$deviceinfo_prebuilt_boot_ramdisk_source"
+        curl --location --output halium-boot-ramdisk.img "$RAMDISK_URL"
     else
         print_message "Downloading dynparts ramdisk for devices with dynamic partitions"
         RAMDISK_URL="https://github.com/halium/initramfs-tools-halium/releases/download/dynparts/initrd.img-touch-${RAMDISK_ARCH}"
+        curl --location --output halium-boot-ramdisk.img "$RAMDISK_URL"
     fi
-    curl --location --output halium-boot-ramdisk.img "$RAMDISK_URL"
 }
 
 cd "$TMPDOWN"
