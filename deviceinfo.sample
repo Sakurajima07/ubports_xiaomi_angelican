@@ -94,6 +94,9 @@ deviceinfo_kernel_use_lld="false"
 # Force use of specified kernel image, do not set to autodetect
 deviceinfo_kernel_image_name="Image.lz4"
 
+# Disable running "make install_modules" in case your kernel has support for them disabled for example
+deviceinfo_kernel_disable_modules="true"
+
 #
 ##########
 
