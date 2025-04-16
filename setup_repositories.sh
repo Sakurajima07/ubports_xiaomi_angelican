@@ -116,6 +116,11 @@ setup_clang() {
                 CLANG_BRANCH="master-kernel-build-2022"
                 CLANG_REVISION="r450784e"
                 ;;
+            14)
+                CLANG_BRANCH="main-kernel-build-2023"
+                CLANG_REVISION="r487747c"
+                ;;
+
             *)
                 print_error "Clang is not supported with halium version '$deviceinfo_halium_version'"
                 exit 1
