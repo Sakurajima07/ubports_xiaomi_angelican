@@ -68,7 +68,8 @@ setup_gcc() {
         drop_python_wrapper "$GCC_PATH/bin/aarch64-linux-android-gcc"
     fi
 
-    if [[ "$ARCH" = "arm" ]]; then
+    # arm64 also needs 32-bit gcc
+    if [[ "$ARCH" = "arm"* ]]; then
         clone_if_not_existing "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9" "pie-gsi"
         # shellcheck disable=SC2034
         GCC_ARM32_PATH="$TMPDOWN/arm-linux-androideabi-4.9"
