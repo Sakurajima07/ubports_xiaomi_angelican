@@ -32,6 +32,9 @@ fi
 
 output_name=device_"$device"
 
+# Fix up permissions of / for classic snaps
+chmod 755 "$dir/system"
+
 tar -cJf "$output/$output_name.tar.xz" -C "$dir" \
     --owner=root --group=root \
     partitions/ system/
