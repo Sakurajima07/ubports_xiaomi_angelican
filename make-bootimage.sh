@@ -98,7 +98,7 @@ if [ -d "$HERE/vendor-ramdisk-overlay" ]; then
         module_files=("$modules/modules.alias" "$modules/modules.dep" "$modules/modules.softdep")
         set +x
         while read -r mod; do
-            mod_path="$(echo -e "$all_modules" | grep "/$mod" || true)" # ".../kernel/.../mod.ko"
+            mod_path="$(echo -e "$all_modules" | grep "/$mod.ko" || true)" # ".../kernel/.../mod.ko"
             if [ -z "$mod_path" ]; then
                 echo "Missing the module file $mod included in modules.load"
                 continue
