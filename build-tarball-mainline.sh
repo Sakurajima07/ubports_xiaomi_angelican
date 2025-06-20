@@ -10,7 +10,11 @@ mode=${4:-normal}
 echo "Working on device: $device; mode: $mode"
 if [ ! -f "$dir/partitions/boot.img" ]; then
     echo "boot.img does not exist!"
-exit 1; fi
+    exit 1
+elif [[ -d "$dir/system/opt/halium-overlay" && -d "$dir/system/usr/share/halium-overlay" ]]; then
+    echo "both /usr/share/halium-overlay & /opt/halium-overlay cannot exist at the same time!"
+    exit 1
+fi
 
 if [ "$mode" = "usrmerge" ]; then
     cd "$dir"
