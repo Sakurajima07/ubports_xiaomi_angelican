@@ -26,12 +26,12 @@ esac
 URL='https://system-image.ubports.com'
 case "${deviceinfo_ubuntu_touch_release:-focal}" in
     "focal")
-        DEFAULT_ROOTFS_URL="https://ci.ubports.com/job/focal-hybris-rootfs-arm64/job/master/lastSuccessfulBuild/artifact/ubuntu-touch-android9plus-rootfs-$ROOTFS_ARCH.tar.gz"
+        DEFAULT_ROOTFS_URL="https://ci.ubports.com/job/ubuntu-touch-rootfs/job/ubports%252Ffocal/lastSuccessfulBuild/artifact/ubuntu-touch-android9plus-rootfs-$ROOTFS_ARCH.tar.gz"
         DEFAULT_OTA_CHANNEL="20.04/$ROOTFS_ARCH/android9plus/devel"
         ;;
     "noble")
-        DEFAULT_ROOTFS_URL="https://ci.ubports.com/job/focal-hybris-rootfs-arm64/job/master/lastSuccessfulBuild/artifact/ubuntu-touch-android9plus-rootfs-next-$ROOTFS_ARCH.tar.gz"
-        DEFAULT_OTA_CHANNEL="utnext/$ROOTFS_ARCH/android9plus/daily"
+        DEFAULT_ROOTFS_URL="https://ci.ubports.com/job/ubuntu-touch-rootfs/job/main/lastSuccessfulBuild/artifact/ubuntu-touch-android9plus-rootfs-$ROOTFS_ARCH.tar.gz"
+        DEFAULT_OTA_CHANNEL="24.04-1.x/arm64/android9plus/daily"
         ;;
     *)
         # Both overrides need to be specified, if no ubuntu touch release is set
