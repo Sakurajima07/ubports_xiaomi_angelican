@@ -31,7 +31,7 @@ case "${deviceinfo_ubuntu_touch_release:-focal}" in
         ;;
     "noble")
         DEFAULT_ROOTFS_URL="https://ci.ubports.com/job/ubuntu-touch-rootfs/job/main/lastSuccessfulBuild/artifact/ubuntu-touch-android9plus-rootfs-$ROOTFS_ARCH.tar.gz"
-        DEFAULT_OTA_CHANNEL="24.04-1.x/arm64/android9plus/daily"
+        DEFAULT_OTA_CHANNEL="24.04-1.x/$ROOTFS_ARCH/android9plus/daily"
         ;;
     *)
         # Both overrides need to be specified, if no ubuntu touch release is set
