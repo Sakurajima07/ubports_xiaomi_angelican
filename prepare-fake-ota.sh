@@ -29,7 +29,7 @@ case "${deviceinfo_ubuntu_touch_release:-focal}" in
         DEFAULT_ROOTFS_URL="https://ci.ubports.com/job/ubuntu-touch-rootfs/job/ubports%252Ffocal/lastSuccessfulBuild/artifact/ubuntu-touch-android9plus-rootfs-$ROOTFS_ARCH.tar.gz"
         DEFAULT_OTA_CHANNEL="20.04/$ROOTFS_ARCH/android9plus/devel"
         ;;
-    "noble")
+    "24.04-1.x")
         DEFAULT_ROOTFS_URL="https://ci.ubports.com/job/ubuntu-touch-rootfs/job/main/lastSuccessfulBuild/artifact/ubuntu-touch-android9plus-rootfs-$ROOTFS_ARCH.tar.gz"
         DEFAULT_OTA_CHANNEL="utnext/$ROOTFS_ARCH/android9plus/daily"
         ;;
