@@ -44,7 +44,7 @@ deviceinfo_halium_version="10"
 
 # The Ubuntu Touch release, which should be used (eg as rootfs):
 #  - focal  - 20.04
-#  - noble  - 24.04
+#  - 24.04-1.x  - 24.04
 deviceinfo_ubuntu_touch_release="focal"
 
 #
