@@ -1,6 +1,11 @@
 #!/bin/bash
 set -ex
 
+HERE=$(pwd)
+source "${HERE}/deviceinfo"
+
+deviceinfo_ubuntu_touch_release=${deviceinfo_ubuntu_touch_release:-focal}
+
 device=$1
 output=$(realpath "$2")
 dir=$(realpath "$3")
@@ -14,6 +19,10 @@ if [ ! -f "$dir/partitions/boot.img" ]; then
 elif [[ -d "$dir/system/opt/halium-overlay" && -d "$dir/system/usr/share/halium-overlay" ]]; then
     echo "both /usr/share/halium-overlay & /opt/halium-overlay cannot exist at the same time!"
     exit 1
+fi
+
+if [ -e "${HERE}/${deviceinfo_ubuntu_touch_release}-overlay" ]; then
+    cp -a ${HERE}/${deviceinfo_ubuntu_touch_release}-overlay/system/* $dir/system/
 fi
 
 if [ "$mode" = "usrmerge" ]; then
