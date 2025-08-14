@@ -2,8 +2,8 @@
 set -xe
 shopt -s extglob
 
-BUILD_DIR=
-OUT=
+BUILD_DIR=workdir
+OUT=out
 ONLY_CLONE=
 ONLY_KERNEL=
 MENUCONFIG=
@@ -11,7 +11,7 @@ MENUCONFIG=
 while [ $# -gt 0 ]
 do
     case "$1" in
-    (-b) BUILD_DIR="$(realpath "$2")"; shift;;
+    (-b) BUILD_DIR="$2"; shift;;
     (-o) OUT="$2"; shift;;
     (-c) ONLY_CLONE="true";;
     (-k) ONLY_KERNEL="true";;
@@ -22,20 +22,16 @@ do
     shift
 done
 
-OUT="$(realpath "$OUT" 2>/dev/null || echo 'out')"
-mkdir -p "$OUT"
+BUILD_DIR="$(realpath "$BUILD_DIR")"
+OUT="$(realpath "$OUT")"
+mkdir -p "$BUILD_DIR" "$OUT"
 
-if [ -z "$BUILD_DIR" ]; then
-    TMP=$(mktemp -d)
-    TMPDOWN=$(mktemp -d)
-else
-    TMP="$BUILD_DIR/tmp"
-    # Clean up installation dir in case of local builds
-    rm -rf "$TMP"
-    mkdir -p "$TMP"
-    TMPDOWN="$BUILD_DIR/downloads"
-    mkdir -p "$TMPDOWN"
-fi
+TMP="$BUILD_DIR/tmp"
+# Clean up installation dir in case of local builds
+[ -d "$TMP" ] && rm -rf "$TMP"
+mkdir -p "$TMP"
+TMPDOWN="$BUILD_DIR/downloads"
+mkdir -p "$TMPDOWN"
 
 HERE=$(pwd)
 SCRIPT="$(dirname "$(realpath "$0")")"/build
