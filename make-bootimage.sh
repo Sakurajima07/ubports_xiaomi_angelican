@@ -136,6 +136,10 @@ fi
 
 if [ -n "$deviceinfo_kernel_image_name" ]; then
     KERNEL="$KERNEL_OBJ/arch/$ARCH/boot/$deviceinfo_kernel_image_name"
+    # Handle lz4 compression if needed
+    if [ "$deviceinfo_kernel_image_name" == "Image.lz4" ] && [ ! -e "$KERNEL" ]; then
+        lz4 -l -9 "$KERNEL_OBJ/arch/$ARCH/boot/Image" "$KERNEL"
+    fi
 else
     # Autodetect kernel image name for boot.img
     if [ "$deviceinfo_bootimg_header_version" -ge 2 ]; then
