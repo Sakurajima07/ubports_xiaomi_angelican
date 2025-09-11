@@ -21,9 +21,39 @@ elif [[ -d "$dir/system/opt/halium-overlay" && -d "$dir/system/usr/share/halium-
     exit 1
 fi
 
+cp -av overlay/* "${dir}/"
+
 if [ -e "${HERE}/${deviceinfo_ubuntu_touch_release}-overlay" ]; then
     cp -a ${HERE}/${deviceinfo_ubuntu_touch_release}-overlay/system/* $dir/system/
 fi
+
+INITRC_PATHS="
+${dir}/system/opt/halium-overlay/system/etc/init
+${dir}/system/usr/share/halium-overlay/system/etc/init
+${dir}/system/opt/halium-overlay/vendor/etc/init
+${dir}/system/usr/share/halium-overlay/vendor/etc/init
+${dir}/system/android/system/etc/init
+${dir}/system/android/vendor/etc/init
+"
+while IFS= read -r path ; do
+    if [ -d "$path" ]; then
+        find "$path" -type f -exec chmod 644 {} \;
+    fi
+done <<< "$INITRC_PATHS"
+
+BUILDPROP_PATHS="
+${dir}/system/opt/halium-overlay/system
+${dir}/system/usr/share/halium-overlay/system
+${dir}/system/opt/halium-overlay/vendor
+${dir}/system/usr/share/halium-overlay/vendor
+${dir}/system/android/system
+${dir}/system/android/vendor
+"
+while IFS= read -r path ; do
+    if [ -d "$path" ]; then
+        find "$path" -type f \( -name "prop.halium" -o -name "build.prop" \) -exec chmod 600 {} \;
+    fi
+done <<< "$BUILDPROP_PATHS"
 
 if [ "$mode" = "usrmerge" ]; then
     cd "$dir"

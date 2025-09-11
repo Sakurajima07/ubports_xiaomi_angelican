@@ -104,36 +104,6 @@ if [ "$ONLY_KERNEL" = "true" ]; then
     exit 0
 fi
 
-cp -av overlay/* "${TMP}/"
-
-INITRC_PATHS="
-${TMP}/system/opt/halium-overlay/system/etc/init
-${TMP}/system/usr/share/halium-overlay/system/etc/init
-${TMP}/system/opt/halium-overlay/vendor/etc/init
-${TMP}/system/usr/share/halium-overlay/vendor/etc/init
-${TMP}/system/android/system/etc/init
-${TMP}/system/android/vendor/etc/init
-"
-while IFS= read -r path ; do
-    if [ -d "$path" ]; then
-        find "$path" -type f -exec chmod 644 {} \;
-    fi
-done <<< "$INITRC_PATHS"
-
-BUILDPROP_PATHS="
-${TMP}/system/opt/halium-overlay/system
-${TMP}/system/usr/share/halium-overlay/system
-${TMP}/system/opt/halium-overlay/vendor
-${TMP}/system/usr/share/halium-overlay/vendor
-${TMP}/system/android/system
-${TMP}/system/android/vendor
-"
-while IFS= read -r path ; do
-    if [ -d "$path" ]; then
-        find "$path" -type f \( -name "prop.halium" -o -name "build.prop" \) -exec chmod 600 {} \;
-    fi
-done <<< "$BUILDPROP_PATHS"
-
 if [ -z "$deviceinfo_use_overlaystore" ]; then
     # create device tarball for https://wiki.debian.org/UsrMerge rootfs
     "$SCRIPT/build-tarball-mainline.sh" "${deviceinfo_codename}" "${OUT}" "${TMP}" "usrmerge"
