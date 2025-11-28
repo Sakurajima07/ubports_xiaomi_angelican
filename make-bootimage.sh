@@ -186,6 +186,7 @@ fi
 MKBOOTIMG="$TMPDOWN/android_system_tools_mkbootimg/mkbootimg.py"
 EXTRA_ARGS=""
 EXTRA_VENDOR_ARGS=""
+INIT_BOOT_IMAGE=""
 
 if [ "$deviceinfo_bootimg_header_version" -le 2 ]; then
     EXTRA_ARGS+=" --base $deviceinfo_flash_offset_base --kernel_offset $deviceinfo_flash_offset_kernel --ramdisk_offset $deviceinfo_flash_offset_ramdisk --second_offset $deviceinfo_flash_offset_second --tags_offset $deviceinfo_flash_offset_tags --pagesize $deviceinfo_flash_pagesize"
@@ -214,9 +215,10 @@ fi
 if [ "$deviceinfo_bootimg_header_version" -le 2 ]; then
     "$MKBOOTIMG" --kernel "$KERNEL" --ramdisk "$RAMDISK" --cmdline "$deviceinfo_kernel_cmdline" --header_version $deviceinfo_bootimg_header_version -o "$OUT" --os_version $deviceinfo_bootimg_os_version --os_patch_level $deviceinfo_bootimg_os_patch_level $EXTRA_ARGS
 else
-    if [ -n "$deviceinfo_bootimg_has_init_boot_partition" ] && [ "$deviceinfo_bootimg_has_init_boot_partition" == "true" ]; then
+    if ([ -n "$deviceinfo_bootimg_has_init_boot_partition" ] && [ "$deviceinfo_bootimg_has_init_boot_partition" == "true" ]) || [ -n "$deviceinfo_init_boot_partition_size" ]; then
+        INIT_BOOT_IMAGE="$(dirname "$OUT")/init_$(basename "$OUT")"
         "$MKBOOTIMG" --kernel "$KERNEL" --header_version $deviceinfo_bootimg_header_version -o "$OUT" --os_version $deviceinfo_bootimg_os_version --os_patch_level $deviceinfo_bootimg_os_patch_level $EXTRA_ARGS
-        "$MKBOOTIMG" --ramdisk "$RAMDISK" --header_version $deviceinfo_bootimg_header_version -o "$(dirname "$OUT")/init_$(basename "$OUT")"
+        "$MKBOOTIMG" --ramdisk "$RAMDISK" --header_version $deviceinfo_bootimg_header_version -o "$INIT_BOOT_IMAGE"
     else
         "$MKBOOTIMG" --kernel "$KERNEL" --ramdisk "$RAMDISK" --header_version $deviceinfo_bootimg_header_version -o "$OUT" --os_version $deviceinfo_bootimg_os_version --os_patch_level $deviceinfo_bootimg_os_patch_level $EXTRA_ARGS
     fi
@@ -245,6 +247,11 @@ if [ -n "$deviceinfo_bootimg_partition_size" ]; then
             python3 "$TMPDOWN/avb/avbtool" append_vbmeta_image --image "$OUT" --partition_size "$deviceinfo_bootimg_partition_size" --vbmeta_image "$TMPDOWN/vbmeta.img"
         fi
     fi
+fi
+
+if [ -n "$INIT_BOOT_IMAGE" ]; then
+    init_partition_size="${deviceinfo_init_boot_partition_size:-8388608}"
+    python3 "$TMPDOWN/avb/avbtool" add_hash_footer --image "$INIT_BOOT_IMAGE" --partition_name init_boot --partition_size $init_partition_size $INIT_BOOT_EXTRA_ARGS
 fi
 
 if [ -n "$deviceinfo_has_recovery_partition" ] && $deviceinfo_has_recovery_partition; then
