@@ -238,7 +238,7 @@ do
                         sudo umount "$SYSTEM_MOUNTPOINT"
                         rmdir "$SYSTEM_MOUNTPOINT"
                     else
-                        mke2fs -t ext4 -O \^metadata_csum "$OUT/rootfs.img" 3000000 -d "$SYSTEM_MOUNTPOINT"
+                        mke2fs -t ext4 -O \^metadata_csum "$OUT/rootfs.img" ${deviceinfo_system_partition_size:-3500M} -d "$SYSTEM_MOUNTPOINT"
                         rm -rf "$SYSTEM_MOUNTPOINT"
                     fi
                     # Create fastboot flashable image
