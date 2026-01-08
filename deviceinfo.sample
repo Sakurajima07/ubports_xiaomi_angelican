@@ -169,6 +169,9 @@ deviceinfo_prebuilt_dtbo="dtbo.img"
 # Whether a dtbo image should be generated or not
 deviceinfo_dtbo="false"
 
+# Define optional dtbo(s) id(s)
+deviceinfo_dtbo_ids="0x0 0x1"
+
 # Whether to not copy an image for dedicated dtbo partition
 # This does not affect recovery partition image build
 deviceinfo_skip_dtbo_partition="true"
