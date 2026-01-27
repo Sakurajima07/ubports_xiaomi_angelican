@@ -1,0 +1,124 @@
+name: GSI Port Build
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y --no-install-recommends \
+            bc bison build-essential ca-certificates cpio curl \
+            fakeroot flex git kmod libelf-dev libssl-dev libtinfo5 \
+            lz4 python2 python3 sudo unzip wget xz-utils
+
+      - name: Set Python2 as default
+        run: |
+          sudo rm -rf /usr/bin/python
+          sudo ln -s /usr/bin/python2 /usr/bin/python
+
+      - name: Clone Halium Adaptation Tools
+        run: |
+          git clone -b main \
+            https://gitlab.com/ubports/porting/community-ports/halium-generic-adaptation-build-tools.git build
+
+      - name: Run build script
+        run: ./build/build.sh
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: out/*
+
+  flashable:
+    runs-on: ubuntu-22.04
+    needs: build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git img2simg jq sudo wget xz-utils
+
+      - name: Clone Halium Adaptation Tools
+        run: |
+          git clone -b main \
+            https://gitlab.com/ubports/porting/community-ports/halium-generic-adaptation-build-tools.git build
+
+      - name: Fetch and prepare OTA
+        run: |
+          DEVICE="$(source deviceinfo && echo $deviceinfo_codename)"
+          ./build/fetch-and-prepare-latest-ota.sh "20.04/arm64/android9plus/devel" "$DEVICE" ota
+
+      - name: Build system image
+        run: |
+          mkdir -p out
+          ./build/system-image-from-ota.sh ota/ubuntu_command out
+
+      - name: Upload flashable artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: flashable-artifacts
+          path: |
+            out/boot.img
+            out/init_boot.img
+            out/vendor_boot.img
+            out/system.img
+            out/dtbo.img
+
+  devel-flashable:
+    runs-on: ubuntu-22.04
+    needs: build
+    if: success()
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git img2simg jq sudo wget xz-utils
+
+      - name: Clone Halium Adaptation Tools
+        run: |
+          git clone -b main \
+            https://gitlab.com/ubports/porting/community-ports/halium-generic-adaptation-build-tools.git build
+
+      - name: Prepare fake OTA
+        run: |
+          DEVICE="$(source deviceinfo && echo $deviceinfo_codename)"
+          ./build/prepare-fake-ota.sh out/device_${DEVICE}.tar.xz ota
+
+      - name: Build system image
+        run: |
+          mkdir -p out
+          ./build/system-image-from-ota.sh ota/ubuntu_command out
+
+      - name: Rename rootfs to ubuntu.img
+        run: mv out/rootfs.img out/ubuntu.img
+
+      - name: Upload development flashable artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: devel-flashable-artifacts
+          path: |
+            out/boot.img
+            out/init_boot.img
+            out/vendor_boot.img
+            out/ubuntu.img
+            out/dtbo.img
