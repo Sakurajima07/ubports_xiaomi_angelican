@@ -1,0 +1,28 @@
+name: Repo check
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install shellcheck git -y
+
+      - name: Shell Check
+        run: |
+          # git ls-files --exclude='*.sh' --ignored -c -z | xargs -0r shellcheck
+          # Enable the above once all scripts pass shellcheck.
+          # Until then, shellcheck each script individually.
+          shellcheck common_functions.sh
+          shellcheck setup_repositories.sh
